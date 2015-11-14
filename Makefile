@@ -1,19 +1,23 @@
 #makefile for BUGS I - SRN 7/12/91 
 # modified for Linux on 6/15/92 Ken Corey
 
-CC= gcc
-CFLAGS= -O3
-OBJS= main.o startup.o loop.o meat.o
+PROG = bugs
 
-#bugs : &  $(OBJS)
-bugs :  $(OBJS)   
-#use above line if parallel processing is not supported
-	${CC} ${CFLAGS} -o bugs $(OBJS) -lcurses -ltermcap 
+CC       ?= gcc
+CFLAGS   ?= -O3
+CFLAGS   += $(shell ncurses5-config --cflags)
+CPPFLAGS += -DLINUX
+LIBS     += $(shell ncurses5-config --libs)
 
-main.o: main.c info.h
-	${CC} ${CFLAGS} -DLINUX -o main.o main.c
+SRCS = $(wildcard *.c)
+OBJS = $(SRCS:.c=.o)
+DEPS = info.h
 
-$(OBJS):  info.h	
+$(PROG): $(OBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
+%.o: %.c $(DEPS)
 
 clean: 
-	rm -f *.o core temp.c a.out
+	$(RM) $(PROG) $(OBJS)
+.PHONY: clean

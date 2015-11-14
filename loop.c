@@ -3,6 +3,8 @@
 struct pos      npos[] = {1, 1,
 			-1, -1}; /*used in turning chips*/
 
+void change(int);
+
 void
 loop()
 {
