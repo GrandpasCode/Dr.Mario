@@ -1,4 +1,8 @@
+#include "startup.h"
 #include "info.h"
+#include "bugs.h"
+
+chtype c[3];                      /* Game piece array */
 
 void newstart()
 {
@@ -22,7 +26,7 @@ void newstart()
 
 void start()                    /*call this every new level */
 {
-    int i, x, y, z, ch;
+    unsigned int i, x, y, z, ch;
     for (y = 1; y < 17; y++)    /*zap board and a[][] */
         for (x = 1; x < 9; x++)
             mvwaddch(w, y, x, BLANK), a[y][x] = 0;
@@ -36,7 +40,10 @@ void start()                    /*call this every new level */
             x = rx(8, 1);
             y = rx(14, 4);
             ch = mvwinch(w, y, x);
-            if ((mvwinch(w, y + 3, x) == c[z] || mvwinch(w, y - 3, x) == c[z]) || (mvwinch(w, y, x + 3) == c[z] || mvwinch(w, y, x - 3) == c[z]))       /* can't have 4 in a row or col to start */
+            if (mvwinch(w, y + 3, x) == c[z]
+             || mvwinch(w, y - 3, x) == c[z]
+             || mvwinch(w, y, x + 3) == c[z]
+             || mvwinch(w, y, x - 3) == c[z])       /* can't have 4 in a row or col to start */
                 ch = 0;
 
         }

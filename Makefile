@@ -5,13 +5,18 @@ PROG = bugs
 
 CC       ?= gcc
 CFLAGS   ?= -O3
+CFLAGS	 += -std=c99 -Wall -Wextra
 CFLAGS   += $(shell ncurses5-config --cflags)
 CPPFLAGS += -DLINUX
+CPPFLAGS += -D_POSIX_C_SOURCE=199309L
+CPPFLAGS += -D_XOPEN_SOURCE -D_XOPEN_SOURCE_EXTENDED
 LIBS     += $(shell ncurses5-config --libs)
 
 SRCS = $(wildcard *.c)
 OBJS = $(SRCS:.c=.o)
 DEPS = info.h
+
+all: $(PROG)
 
 $(PROG): $(OBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)

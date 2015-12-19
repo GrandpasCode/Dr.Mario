@@ -7,10 +7,15 @@
 
 #include "bugs.h"
 #include "info.h"
-#include <signal.h>
+#include "loop.h"
+#include "startup.h"
 #include <fcntl.h>
-void bleed();
-main(int argc, char *argv[])
+#include <signal.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+int main()
 {
     signal(SIGQUIT, fatal_err); /*control-/ */
     signal(SIGINT, fatal_err);  /*control-c */
@@ -53,6 +58,8 @@ main(int argc, char *argv[])
         wrefresh(w);
         while ((j = wgetch(w)) != '\n');
     }
+
+    return EXIT_SUCCESS;
 }
 
 void fatal(char *s)             /*End of Game or user quit if we're here */
@@ -67,6 +74,7 @@ void fatal(char *s)             /*End of Game or user quit if we're here */
 
 void fatal_err(int e)           /* handle ctrl-c or z */
 {
+    (void) e;
     move(LINES - 1, 0);
     refresh();
     bleed(0, 0);

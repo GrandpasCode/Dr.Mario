@@ -1,4 +1,9 @@
 #include "info.h"
+#include "meat.h"
+
+struct pos t[48];               /*terminate array - could have used
+                                   linked lists, wouldn't be worth
+                                   time spent in malloc each time */
 
 void meat()                     /*checks and removes */
 {
@@ -39,7 +44,7 @@ void meat()                     /*checks and removes */
 int terminate()                 /*I'll be back! */
 {
     struct pos *tp = t;         /*tp points to t[0] */
-    int i;
+    unsigned int i;
     wrefresh(w);
 
     if (v == 0)

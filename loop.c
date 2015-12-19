@@ -1,7 +1,13 @@
+#include "loop.h"
 #include "info.h"
+#include "bugs.h"
+#include "meat.h"
+#include "startup.h"
+#include <time.h>
 
-struct pos npos[] = { 1, 1,
-    -1, -1
+struct pos npos[] = {
+    { 1,  1},
+    {-1, -1}
 };                              /*used in turning chips */
 
 void change(int);
@@ -52,8 +58,9 @@ void loop()
 
 void loop2()
 {
-    int i, dflg = 0, flags;
+    int i, dflg = 0;
     short tme = 0;              /*time counter */
+    struct timespec t = { .tv_sec = 0, .tv_nsec = 0 };
 
     while ((i = wgetch(w)) != 'q' && !dflg)
     {
@@ -105,7 +112,8 @@ void loop2()
             refresh();
             break;
         default:
-            usleep(250000L - sp * 50000);
+            t.tv_nsec = 250000000L - sp * 50000000L;
+            nanosleep(&t, NULL);
             break;
         }
         if (i != EOF)           /*EOF is generated if no input */
@@ -199,26 +207,4 @@ void change(int dir)            /*rotate piece */
         cp = 3;
     else if (cp > 3)
         cp = 0;                 /*positions number from 0 to 3 */
-}
-
-    /*
-       usleep -- support routine for 4.2BSD system call emulations
-
-       last edit:       29-Oct-1984     D A Gwyn
-     */
-
-
-
-int usleep(long usec)           /* delay in microseconds, returns 0 if ok, else -1 */
-{
-    static struct               /* `timeval' */
-    {
-        long tv_sec;            /* seconds */
-        long tv_usec;           /* microsecs */
-    } delay;                    /* _select() timeout */
-
-    delay.tv_sec = usec / 1000000L;
-    delay.tv_usec = usec % 1000000L;
-
-    return select(0, (long *) 0, (long *) 0, (long *) 0, &delay);
 }
