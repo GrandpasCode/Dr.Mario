@@ -31,6 +31,7 @@ int main()
     signal(SIGTSTP, fatal_err); /*control-z */
     noecho();
     crmode();                   /*no return needed for input */
+    curs_set(0);
 
     lv = get_option("Level", 0, 20);
     sp = get_option("Speed", 1, 3);
