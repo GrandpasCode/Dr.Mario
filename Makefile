@@ -18,6 +18,8 @@ $(PROG): $(OBJS)
 
 %.o: %.c $(DEPS)
 
+bugs.o: bugs.h
+
 clean: 
 	$(RM) $(PROG) $(OBJS)
 .PHONY: clean
