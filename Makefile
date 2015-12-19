@@ -16,6 +16,12 @@ SRCS = $(wildcard *.c)
 OBJS = $(SRCS:.c=.o)
 DEPS = info.h
 
+INSTALL      = install
+INSTALL_BIN  = $(INSTALL) -D -m 755
+
+PREFIX    = /usr/local
+BIN_DIR   = $(PREFIX)/bin
+
 all: $(PROG)
 
 $(PROG): $(OBJS)
@@ -25,6 +31,13 @@ $(PROG): $(OBJS)
 
 bugs.o: bugs.h
 
+install: all
+	$(INSTALL_BIN) $(PROG) $(BIN_DIR)/$(PROG)
+.PHONY: install
+
+uninstall:
+	$(RM)    $(BIN_DIR)/$(PROG)
+.PHONY: uninstall
 clean: 
 	$(RM) $(PROG) $(OBJS)
 .PHONY: clean
